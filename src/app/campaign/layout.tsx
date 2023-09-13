@@ -1,8 +1,6 @@
 import CampaignList from "@/components/campaignList/CampaignList";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
-import { bg } from "../../../public/assets";
 import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="w-full px-8 h-[100px] bg-[#333] z-40 fixed left-0 top-0 flex justify-between items-center">
-          <Link href='/' className="text-xl text-white font-semibold">Home</Link>
+          <Link href="/" className="text-xl text-white font-semibold">
+            Home
+          </Link>
           <div className="w-10 h-10 border rounded-full flex justify-center items-center text-white">
             NO
           </div>

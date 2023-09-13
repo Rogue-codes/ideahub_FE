@@ -1,11 +1,32 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import Image from "next/image";
-import React from "react";
-import { collabo } from "../../../public/assets";
+import React, { useEffect, useState } from "react";
+import { collabo } from "../../../../public/assets";
 import { FcIdea } from "react-icons/fc";
 import { SlLike } from "react-icons/sl";
+import { useParams } from "next/navigation";
+import { CampaignType } from "@/types";
+import ApiFetcher from "@/utils/Api/ApiFetcher";
 
+export default function Campaign() {
+  const { id } = useParams();
 
-export default function page() {
+  const [campaign, setCampaign] = useState<CampaignType | null>(null);
+
+  const getCampaign = async () => {
+    try {
+      const res = await ApiFetcher.get(`/campaign/${id}`);
+      setCampaign(res?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(()=>{
+    getCampaign()
+  },[])
+  
   return (
     <main className="relative h-screen mt-[100px] w-full px-5">
       <div className="w-full  h-[100px] flex justify-between items-center">
@@ -25,14 +46,22 @@ export default function page() {
 
       <div className="w-full pb-8 border-b flex justify-between items-center">
         <div className="text-[#333] font-semibold text-xl w-[45%]">
-          <p className="py-3 font-bold text-xl">Return to Workplace</p>
-          <p className="py-3 font-bold text-xl">Expired</p>
+          <p className="py-3 font-bold text-xl">{campaign?.campaign_name}</p>
+          <p className="py-3 font-bold text-xl">
+            {" "}
+            {campaign?.end_date
+              ? new Date().getDate() > new Date(campaign.end_date).getDate()
+                ? "Expired"
+                : "Active"
+              : "End date not available"}
+          </p>
           <p className="text-sm font-normal">
-            We are looking for ideas to help make our office safer for all of
-            our employees when we reopen later this year.
+            {campaign?.campaign_description}
           </p>
           <h2 className="py-3 font-bold text-xl">Duration</h2>
-          <p className="text-sm font-normal">5/23/2022 - 7/29/2022</p>
+          <p className="text-sm font-normal">
+            {campaign?.start_date} - {campaign?.end_date}
+          </p>
         </div>
         <div className="w-[50%] h-[200px] rounded-lg">
           <Image
